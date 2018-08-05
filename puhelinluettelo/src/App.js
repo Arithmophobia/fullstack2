@@ -1,6 +1,7 @@
 import React from 'react'
 import Person from './components/Person'
 import Filter from './components/Filter'
+import Notification from './components/Notification'
 import personService from './services/persons'
 
 class App extends React.Component {
@@ -11,7 +12,17 @@ class App extends React.Component {
             newName: '',
             newNumber: '',
             filter: '',
+            note: null
         }
+    }
+
+    makeNote = (message) => {
+        this.setState({
+            note: message,
+        })
+        setTimeout(() => {
+            this.setState({ note: null })
+        }, 5000)
     }
 
     componentDidMount() {
@@ -48,6 +59,7 @@ class App extends React.Component {
             personService
                 .create(personObject)
                 .then(newPerson => {
+                    this.makeNote(`Lisättiin ${newPerson.name}`)
                     this.setState({
                         persons: this.state.persons.concat(newPerson),
                         newName: '',
@@ -78,6 +90,7 @@ class App extends React.Component {
                 personService
                     .remove(id)
                     .then(response => {
+                        this.makeNote(`Poistettiin ${name}`)
                         this.setState({
                             persons: this.state.persons.filter(n => n.id !== id)
                         })
@@ -97,6 +110,7 @@ class App extends React.Component {
         personService
             .update(id, changedPerson)
             .then(changedPerson => {
+                this.makeNote(`Henkilön ${changedPerson.name} numero muutettiin`)
                 this.setState({
                     persons: this.state.persons.map(person => person.id !== id ? person : changedPerson),
                     newName: '',
@@ -105,7 +119,11 @@ class App extends React.Component {
             })
             .catch(error => {
                 alert(`henkilö '${person.name}' on jo valitettavasti poistettu palvelimelta`)
-                this.setState({ persons: this.state.persons.filter(n => n.id !== id) })
+                this.setState({
+                    persons: this.state.persons.filter(n => n.id !== id),
+                    newName: '',
+                    newNumber: ''
+                })
             })
     }
 
@@ -119,6 +137,7 @@ class App extends React.Component {
 
             <div>
                 <h1>Puhelinluettelo</h1>
+                <Notification message={this.state.note} />
                 <Filter
                     onChange={this.handleFilterChange}
                     value={this.state.filter}
