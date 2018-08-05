@@ -19,6 +19,21 @@
       "name": "Lea Kutvonen",
       "number": "040-123456",
       "id": 4
+    },
+    {
+      "name": "Esa Laitinen",
+      "number": "111111",
+      "id": 6
+    },
+    {
+      "name": "Sanna Hyvönen",
+      "number": "23232",
+      "id": 7
+    },
+    {
+      "name": "Uuusi Uusinen",
+      "number": "111111",
+      "id": 8
     }
   ]
 }
